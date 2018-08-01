@@ -6,16 +6,12 @@ function bestMatch = fuzzyMatch(query, allText)
     score = zeros(numel(allText, 1));
     for iItem = 1:numel(allText)
         score(iItem) = matcher.fuzzyScore(...
-            java.lang.String(allText{iItem}), java.lang.String(query));
+            java.lang.String(allText{iItem}), ...
+            java.lang.String(query));
     end
-    results = table(score', allText);
-    [val, idx] = max(score)
-    bestResults = results(results.Var1 == val,:)
-    if height(bestResults) > 1
-        matchLength = cellfun(@numel, bestResults.allText);
-        [~, idx] = min(matchLength);
-        bestMatch = bestResults.allText{idx};
-    else
-        bestMatch = bestResults.allText{1};
-    end
+    matchLength = cellfun(@numel, allText);
+    matchLength = -matchLength;
+    score = score';
+    results = table(score, allText, matchLength);
+    bestMatch = sortrows(results, {'score', 'matchLength'});
 end
