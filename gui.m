@@ -1,40 +1,42 @@
 classdef gui < handle
     
     properties
+        Parent
         Input
         Output
         Index
         Query = ''
+        JavaOutput
     end
     
     methods
         function obj = gui()
-            f = figure('Units', 'normalized', ...
+            obj.Parent = figure('Units', 'normalized', ...
                         'Position', [0.3, 0.3, 0.4, 0.4]);
-            f.Units = 'pixels';
-            pixelPosition = f.Position;
+            obj.Parent.Units = 'pixels';
+            pixelPosition = obj.Parent.Position;
             wd = pwd();
             obj.Index = indexDirectory(wd);
             obj.Index = strrep(obj.Index, wd, '');
-            obj.Input = uicontrol('Parent', f, ...
+            obj.Input = uicontrol('Parent', obj.Parent, ...
                 'Style', 'edit', ...
                 'Units', 'pixels', ...
                 'FontSize', 14, ...
                 'Position', [0, pixelPosition(4) - 50, pixelPosition(3), 50]);
             jInput = findjobj(obj.Input);
             jInput.KeyPressedCallback = @obj.update;
-            obj.Output = uicontrol('Parent', f, ...
+            obj.Output = uicontrol('Parent', obj.Parent, ...
                 'Style', 'listbox', ...
                 'String', {'Start typing'}, ...
                 'Units', 'pixels', ...
                 'FontSize', 14, ...
                 'Enable', 'inactive', ...
                 'Position', [0, 0, pixelPosition(3), pixelPosition(4)-50]);
-            jScrollPane = findjobj(obj.Output);
- 
-            jScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-            jScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
+            obj.JavaOutput = findjobj(obj.Output);
+            obj.JavaOutput.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+            obj.JavaOutput.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            figure(obj.Parent);
+            uicontrol(obj.Input)
         end
         
         function update(obj, src, event)
@@ -49,7 +51,12 @@ classdef gui < handle
                 obj.Query = src.getText;
                 result = fuzzyMatch(obj.Query, obj.Index)
                 obj.Output.String = result.allText;
+                
             end
+            pause(0.01);
+            obj.JavaOutput.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+            obj.JavaOutput.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
         end
     end
 end
