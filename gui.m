@@ -7,6 +7,7 @@ classdef gui < handle
         Index
         Query = ''
         JavaOutput
+        Results = {}
     end
     
     methods
@@ -40,23 +41,26 @@ classdef gui < handle
         end
         
         function update(obj, src, event)
-            if event.getKeyCode == 40 % down
-                maxValue = numel(obj.Output.String);
-                obj.Output.Value = min(obj.Output.Value + 1, maxValue);
-            elseif event.getKeyCode == 38 % up
-                obj.Output.Value = max(obj.Output.Value - 1, 1);
-            elseif event.getKeyCode == 10 % return
-                return
-            else
-                obj.Query = src.getText;
-                result = fuzzyMatch(obj.Query, obj.Index)
-                obj.Output.String = result.allText;
-                
+            switch event.getKeyCode()
+                case 40 % down
+                    maxValue = numel(obj.Output.String);
+                    obj.Output.Value = min(obj.Output.Value + 1, maxValue);
+                case 38 % up
+                    obj.Output.Value = max(obj.Output.Value - 1, 1);
+                case 10 % return
+                    currentResult = obj.Results{obj.Output.Value};
+                    edit(currentResult);
+                case 27 % esc
+                    close(obj.Parent);
+                otherwise
+                    obj.Query = src.getText;
+                    result = fuzzyMatch(obj.Query, obj.Index);
+                    obj.Results = result.allText;
+                    obj.Output.String = result.allText;
             end
             pause(0.01);
             obj.JavaOutput.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
             obj.JavaOutput.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        
         end
     end
 end

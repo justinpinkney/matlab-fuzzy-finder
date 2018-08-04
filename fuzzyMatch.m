@@ -13,5 +13,5 @@ function bestMatch = fuzzyMatch(query, allText)
     matchLength = -matchLength;
     score = score';
     results = table(score, allText, matchLength);
-    bestMatch = sortrows(results, {'score', 'matchLength'});
+    bestMatch = sortrows(results, {'score', 'matchLength'}, 'descend');
 end
