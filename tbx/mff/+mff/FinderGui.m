@@ -1,4 +1,4 @@
-classdef gui < handle
+classdef FinderGui < handle
     
     properties
         Parent
@@ -11,7 +11,7 @@ classdef gui < handle
     end
     
     methods
-        function obj = gui()
+        function obj = FinderGui()
             obj.Parent = figure('Units', 'normalized', ...
                         'Position', [0.3, 0.3, 0.4, 0.4], ...
                         'ToolBar', 'none', ...
@@ -19,7 +19,7 @@ classdef gui < handle
             obj.Parent.Units = 'pixels';
             pixelPosition = obj.Parent.Position;
             wd = pwd();
-            obj.Index = indexDirectory(wd);
+            obj.Index = mff.indexDirectory(wd);
             obj.Index = strrep(obj.Index, wd, '');
             obj.Results = obj.Index;
             obj.Input = uicontrol('Parent', obj.Parent, ...
@@ -58,7 +58,7 @@ classdef gui < handle
                     close(obj.Parent);
                 otherwise
                     obj.Query = src.getText;
-                    result = fuzzyMatch(obj.Query, obj.Index);
+                    result = mff.fuzzyMatch(obj.Query, obj.Index);
                     obj.Results = result.allText;
                     obj.Output.String = result.allText;
             end
