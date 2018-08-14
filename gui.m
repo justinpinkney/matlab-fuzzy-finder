@@ -13,7 +13,9 @@ classdef gui < handle
     methods
         function obj = gui()
             obj.Parent = figure('Units', 'normalized', ...
-                        'Position', [0.3, 0.3, 0.4, 0.4]);
+                        'Position', [0.3, 0.3, 0.4, 0.4], ...
+                        'ToolBar', 'none', ...
+                        'MenuBar', 'none');
             obj.Parent.Units = 'pixels';
             pixelPosition = obj.Parent.Position;
             wd = pwd();
@@ -51,6 +53,7 @@ classdef gui < handle
                 case 10 % return
                     currentResult = obj.Results{obj.Output.Value};
                     edit(currentResult);
+                    close(obj.Parent);
                 case 27 % esc
                     close(obj.Parent);
                 otherwise
