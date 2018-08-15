@@ -21,6 +21,9 @@ classdef FinderGui < handle
             wd = pwd();
             obj.Index = mff.indexDirectory(wd);
             obj.Index = strrep(obj.Index, wd, '');
+            % remove any leading slashes
+            obj.Index = strip(obj.Index, 'left', '/');
+            obj.Index = strip(obj.Index, 'left', '\');
             obj.Results = obj.Index;
             obj.Input = uicontrol('Parent', obj.Parent, ...
                 'Style', 'edit', ...
