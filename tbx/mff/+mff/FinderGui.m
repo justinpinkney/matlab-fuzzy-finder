@@ -15,7 +15,8 @@ classdef FinderGui < handle
             obj.Parent = figure('Units', 'normalized', ...
                         'Position', [0.3, 0.3, 0.4, 0.4], ...
                         'ToolBar', 'none', ...
-                        'MenuBar', 'none');
+                        'MenuBar', 'none', ...
+                        'CloseRequestFcn', @(~, ~) obj.delete());
             obj.Parent.Units = 'pixels';
             pixelPosition = obj.Parent.Position;
             wd = pwd();
@@ -44,6 +45,10 @@ classdef FinderGui < handle
             obj.JavaOutput.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             figure(obj.Parent);
             uicontrol(obj.Input)
+        end
+        
+        function delete(obj)
+            delete(obj.Parent);
         end
         
         function update(obj, src, event)
