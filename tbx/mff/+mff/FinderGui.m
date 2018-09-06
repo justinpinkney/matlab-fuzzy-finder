@@ -40,9 +40,7 @@ classdef FinderGui < handle
                 'FontSize', 14, ...
                 'Enable', 'inactive', ...
                 'Position', [0, 0, pixelPosition(3), pixelPosition(4)-50]);
-            obj.JavaOutput = findjobj(obj.Output);
-            obj.JavaOutput.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-            obj.JavaOutput.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            obj.hideScrollbars();
             figure(obj.Parent);
             uicontrol(obj.Input)
         end
@@ -69,6 +67,15 @@ classdef FinderGui < handle
                     result = mff.fuzzyMatch(obj.Query, obj.Index);
                     obj.Results = result.allText;
                     obj.Output.String = result.allText;
+                    obj.hideScrollbars();
+            end
+        end
+    end
+    
+    methods (Access = private)
+        function hideScrollbars(obj)
+            if isempty(obj.JavaOutput)
+                obj.JavaOutput = findjobj(obj.Output);
             end
             pause(0.01);
             obj.JavaOutput.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
